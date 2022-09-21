@@ -86,12 +86,11 @@ fun timeForHalfWay(
     t1: Double, v1: Double,
     t2: Double, v2: Double,
     t3: Double, v3: Double
-): Double =
-    when {
-        (v1 * t1 + v2 * t2 + v3 * t3) / 2 <= v1 * t1 -> (v1 * t1 + v2 * t2 + v3 * t3) / (2 * v1)
-        (v1 * t1 + v2 * t2 + v3 * t3) / 2 <= v1 * t1 + v2 * t2 -> t1 + ((v1 * t1 + v2 * t2 + v3 * t3) / 2 - v1 * t1) / v2
-        else -> (t1 + t2 + ((v1 * t1 + v2 * t2 + v3 * t3) / 2 - v1 * t1 - v2 * t2) / v3)
-    }
+): Double = when {
+    (v1 * t1 + v2 * t2 + v3 * t3) / 2 <= v1 * t1 -> (v1 * t1 + v2 * t2 + v3 * t3) / (2 * v1)
+    (v1 * t1 + v2 * t2 + v3 * t3) / 2 <= v1 * t1 + v2 * t2 -> t1 + ((v1 * t1 + v2 * t2 + v3 * t3) / 2 - v1 * t1) / v2
+    else -> (t1 + t2 + ((v1 * t1 + v2 * t2 + v3 * t3) / 2 - v1 * t1 - v2 * t2) / v3)
+}
 
 
 /**
