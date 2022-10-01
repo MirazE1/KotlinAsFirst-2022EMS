@@ -2,10 +2,7 @@
 
 package lesson3.task1
 
-import kotlin.math.max
-import kotlin.math.min
-import kotlin.math.pow
-import kotlin.math.sqrt
+import kotlin.math.*
 
 // Урок 3: циклы
 // Максимальное количество баллов = 9
@@ -271,7 +268,25 @@ fun cos(x: Double, eps: Double): Double = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun squareSequenceDigit(n: Int): Int = TODO()
+fun squareSequenceDigit(n: Int): Int {
+    var c = 0
+    var x = 0
+    var a = 0
+    for (i in 1..n) {
+        x = i * i
+        while (x != 0) {
+            c += 1
+            x /= 10
+            if (c == n) a = 1
+        }
+        x = i * i
+        if (a == 1) break
+    }
+    for (i in 1..c - n) {
+        x /= 10
+    }
+    return x % 10
+}
 
 /**
  * Сложная (5 баллов)
