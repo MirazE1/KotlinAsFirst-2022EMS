@@ -286,13 +286,13 @@ fun roman(n: Int): String {
         9 -> list.add("CM")
         in 5..8 -> {list.add("D"); for (i in 6..sot) { list.add("C") } }
         4 -> list.add("CD")
-        in 1..3 -> for (i in 2..sot) { list.add("C") }
+        in 1..3 -> for (i in 1..sot) { list.add("C") }
     }
     when (des) {
         9 -> list.add("XC")
         in 5..8 -> {list.add("L"); for (i in 6..des) { list.add("X") } }
         4 -> list.add("XL")
-        in 1..3 -> for (i in 2..des) { list.add("X") }
+        in 1..3 -> for (i in 1..des) { list.add("X") }
     }
     when (edn) {
         9 -> list.add("IX")
