@@ -209,7 +209,18 @@ fun factorize(n: Int): List<Int> = TODO()
  * Результат разложения вернуть в виде строки, например 75 -> 3*5*5
  * Множители в результирующей строке должны располагаться по возрастанию.
  */
-fun factorizeToString(n: Int): String = TODO()
+fun factorizeToString(n: Int): String {
+    val list = mutableListOf<Int>()
+    var i = 2
+    var k = n
+    while (k != 1) {
+        if (k % i == 0) {
+            list.add(i)
+            k /= i
+        } else i++
+    }
+    return list.joinToString(separator = "*")
+}
 
 /**
  * Средняя (3 балла)
@@ -264,7 +275,33 @@ fun decimalFromString(str: String, base: Int): Int = TODO()
  * 90 = XC, 100 = C, 400 = CD, 500 = D, 900 = CM, 1000 = M.
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
-fun roman(n: Int): String = TODO()
+fun roman(n: Int): String {
+    val edn = n % 10
+    val des = n / 10 % 10
+    val sot = n / 100 % 10
+    val tys = n / 1000
+    val list = mutableListOf<String>()
+    if (tys != 0) for (i in 1..tys) { list.add("M") }
+    when (sot) {
+        9 -> list.add("CM")
+        in 5..8 -> {list.add("D"); for (i in 6..sot) { list.add("C") } }
+        4 -> list.add("CD")
+        in 1..3 -> for (i in 2..sot) { list.add("C") }
+    }
+    when (des) {
+        9 -> list.add("XC")
+        in 5..8 -> {list.add("L"); for (i in 6..des) { list.add("X") } }
+        4 -> list.add("XL")
+        in 1..3 -> for (i in 2..des) { list.add("X") }
+    }
+    when (edn) {
+        9 -> list.add("IX")
+        in 5..8 -> {list.add("V"); for (i in 6..edn) { list.add("I") } }
+        4 -> list.add("IV")
+        in 1..3 -> for (i in 1..edn) { list.add("I") }
+    }
+    return list.joinToString(separator = "")
+}
 
 /**
  * Очень сложная (7 баллов)
