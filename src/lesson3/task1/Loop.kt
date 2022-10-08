@@ -190,13 +190,8 @@ fun isCoPrime(m: Int, n: Int): Boolean {
 fun revert(n: Int): Int {
     var m = n
     var c = 0.0
-    var i = -1
-    while (m != 0){
-        m /= 10
-        i++
-    }
-    m = n
-    while (m != 0){
+    var i = digitNumber(n)
+    while (m != 0) {
         c += m % 10 * 10.0.pow(i)
         m /= 10
         i--
