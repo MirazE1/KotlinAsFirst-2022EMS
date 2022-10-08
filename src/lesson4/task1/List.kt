@@ -120,21 +120,16 @@ fun buildSumExample(list: List<Int>) = list.joinToString(separator = " + ", post
  * по формуле abs = sqrt(a1^2 + a2^2 + ... + aN^2).
  * Модуль пустого вектора считать равным 0.0.
  */
-fun abs(v: List<Double>): Double {
-    return if (v.isEmpty()) 0.0
-    else sqrt(v.map { it * it }.sum())
-}
+fun abs(v: List<Double>) = sqrt(v.sumOf { it * it })
 
 /**
  * Простая (2 балла)
  *
  * Рассчитать среднее арифметическое элементов списка list. Вернуть 0.0, если список пуст
  */
-fun mean(list: List<Double>): Double {
-    return if (list.isEmpty()) 0.0
+fun mean(list: List<Double>) =
+    if (list.isEmpty()) 0.0
     else list.sum() / list.size
-}
-
 /**
  * Средняя (3 балла)
  *
@@ -144,11 +139,9 @@ fun mean(list: List<Double>): Double {
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
 fun center(list: MutableList<Double>): MutableList<Double> {
-    if (list.isNotEmpty()) {
-        val n = list.sum() / list.size
-        for (i in 0 until list.size) {
-            list[i] -= n
-        }
+    val n = mean(list)
+    for (i in 0 until list.size) {
+        list[i] -= n
     }
     return list
 }
@@ -161,14 +154,8 @@ fun center(list: MutableList<Double>): MutableList<Double> {
  * C = a1b1 + a2b2 + ... + aNbN. Произведение пустых векторов считать равным 0.
  */
 fun times(a: List<Int>, b: List<Int>): Int {
-    return if (a.isEmpty() && b.isEmpty()) 0
-    else {
-        var c = 0
-        for (i in 0 until a.size) {
-            c += a[i] * b[i]
-        }
-        c
-    }
+    val c = a.mapIndexed { index, i -> i * b[index] }
+    return c.sum()
 }
 
 /**
@@ -276,31 +263,18 @@ fun decimalFromString(str: String, base: Int): Int = TODO()
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
 fun roman(n: Int): String {
-    val edn = n % 10
-    val des = n / 10 % 10
-    val sot = n / 100 % 10
-    val tys = n / 1000
-    val list = mutableListOf<String>()
-    if (tys != 0) for (i in 1..tys) { list.add("M") }
-    when (sot) {
-        9 -> list.add("CM")
-        in 5..8 -> {list.add("D"); for (i in 6..sot) { list.add("C") } }
-        4 -> list.add("CD")
-        in 1..3 -> for (i in 1..sot) { list.add("C") }
+    val r = listOf("M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I")
+    val a = listOf(1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1)
+    val c = mutableListOf<String>()
+    var i = 0
+    var m = n
+    while (m != 0) {
+        if (m - a[i] >= 0) {
+            c.add(r[i])
+            m -= a[i]
+        } else i++
     }
-    when (des) {
-        9 -> list.add("XC")
-        in 5..8 -> {list.add("L"); for (i in 6..des) { list.add("X") } }
-        4 -> list.add("XL")
-        in 1..3 -> for (i in 1..des) { list.add("X") }
-    }
-    when (edn) {
-        9 -> list.add("IX")
-        in 5..8 -> {list.add("V"); for (i in 6..edn) { list.add("I") } }
-        4 -> list.add("IV")
-        in 1..3 -> for (i in 1..edn) { list.add("I") }
-    }
-    return list.joinToString(separator = "")
+    return c.joinToString( separator = "" )
 }
 
 /**
