@@ -160,7 +160,7 @@ fun collatzSteps(x: Int): Int {
 fun lcm(m: Int, n: Int): Int {
     var k = max(m, n)
     while (k % m != 0 || k % n != 0) {
-        k ++
+        k += max(m, n)
     }
     return k
 }
