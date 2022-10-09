@@ -102,18 +102,18 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
     val four = mutableListOf<String>()
     val five = mutableListOf<String>()
     val res = mutableMapOf<Int, List<String>>()
-    for (element in grades) when (element.value) {
+    for ((key, value) in grades) when (value) {
         2 -> {
-            two.add(element.key); res[2] = two
+            two.add(key); res[2] = two
         }
         3 -> {
-            three.add(element.key); res[3] = three
+            three.add(key); res[3] = three
         }
         4 -> {
-            four.add(element.key); res[4] = four
+            four.add(key); res[4] = four
         }
         5 -> {
-            five.add(element.key); res[5] = five
+            five.add(key); res[5] = five
         }
     }
     return res
@@ -129,7 +129,10 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
  *   containsIn(mapOf("a" to "z"), mapOf("a" to "z", "b" to "sweet")) -> true
  *   containsIn(mapOf("a" to "z"), mapOf("a" to "zee", "b" to "sweet")) -> false
  */
-fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean = TODO()
+fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
+    val c = mergePhoneBooks(a, b)
+    return c == a || c == b
+}
 
 /**
  * Простая (2 балла)
@@ -156,7 +159,13 @@ fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>) {
  * В выходном списке не должно быть повторяющихся элементов,
  * т. е. whoAreInBoth(listOf("Марат", "Семён, "Марат"), listOf("Марат", "Марат")) == listOf("Марат")
  */
-fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = TODO()
+fun whoAreInBoth(a: List<String>, b: List<String>): List<String> {
+    val c = mutableListOf<String>()
+    for (value in a) {
+        if (value in b) c.add(value)
+    }
+    return c
+}
 
 /**
  * Средняя (3 балла)
@@ -181,8 +190,7 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
         if (key in mapB) {
             if (value != mapB[key]) res[key] = value + ", " + mapB[key]
             else res[key] = value
-        }
-        else res[key] = value
+        } else res[key] = value
     }
     for ((key, value) in mapB) {
         if (key !in res) res[key] = value
@@ -242,7 +250,17 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean = TODO()
  * Например:
  *   extractRepeats(listOf("a", "b", "a")) -> mapOf("a" to 2)
  */
-fun extractRepeats(list: List<String>): Map<String, Int> = TODO()
+fun extractRepeats(list: List<String>): Map<String, Int> {
+    val res = mutableMapOf<String, Int>()
+    for (i in 0 until list.size) {
+        var c = 1
+        for (k in i + 1 until list.size) {
+            if (list[i] == list[k]) c++
+        }
+        if (c != 1) res[list[i]] = c
+    }
+    return res.toMap()
+}
 
 /**
  * Средняя (3 балла)
