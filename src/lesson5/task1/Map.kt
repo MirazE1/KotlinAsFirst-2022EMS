@@ -97,24 +97,16 @@ fun buildWordSet(text: List<String>): MutableSet<String> {
  *     -> mapOf(5 to listOf("Семён", "Михаил"), 3 to listOf("Марат"))
  */
 fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
-    val two = mutableListOf<String>()
-    val three = mutableListOf<String>()
-    val four = mutableListOf<String>()
-    val five = mutableListOf<String>()
     val res = mutableMapOf<Int, List<String>>()
-    for ((key, value) in grades) when (value) {
-        2 -> {
-            two.add(key); res[2] = two
+    val values = grades.values.toList()
+    val keys = grades.keys.toList()
+    for (i in 0 until grades.size) {
+        val a = mutableListOf<String>()
+        a.add(keys[i])
+        for (c in i + 1 until grades.size) {
+            if (values[i] == values[c]) a.add(keys[c])
         }
-        3 -> {
-            three.add(key); res[3] = three
-        }
-        4 -> {
-            four.add(key); res[4] = four
-        }
-        5 -> {
-            five.add(key); res[5] = five
-        }
+        if (values[i] !in res.keys) res[values[i]] = a
     }
     return res
 }
@@ -130,8 +122,11 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
  *   containsIn(mapOf("a" to "z"), mapOf("a" to "zee", "b" to "sweet")) -> false
  */
 fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
-    val c = mergePhoneBooks(a, b)
-    return c == a || c == b
+    val c = mutableListOf<String>()
+    for ((key, value) in a) {
+        if (value == b[key]) c.add(value)
+    }
+    return a.values.toList() == c
 }
 
 /**
@@ -162,7 +157,7 @@ fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>) {
 fun whoAreInBoth(a: List<String>, b: List<String>): List<String> {
     val c = mutableListOf<String>()
     for (value in a) {
-        if (value in b) c.add(value)
+        if (value in b && value !in c) c.add(value)
     }
     return c
 }
@@ -252,7 +247,7 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean = TODO()
  */
 fun extractRepeats(list: List<String>): Map<String, Int> {
     val res = mutableMapOf<String, Int>()
-    for (i in 0 until list.size) {
+    for (i in list.indices) {
         var c = 1
         for (k in i + 1 until list.size) {
             if (list[i] == list[k]) c++
