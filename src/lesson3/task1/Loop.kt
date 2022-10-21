@@ -174,10 +174,8 @@ fun lcm(m: Int, n: Int): Int {
  */
 fun isCoPrime(m: Int, n: Int): Boolean {
     if (m == 1 || n == 1) return true
-    else {
-        for (i in 2..min(m, n) / 2) if (n % i == 0 && m % i == 0) return false
-        return max(m, n) % min(m, n) != 0
-    }
+    for (i in 2..min(m, n) / 2) if (n % i == 0 && m % i == 0) return false
+    return max(m, n) % min(m, n) != 0
 }
 
 /**
