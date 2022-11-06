@@ -85,14 +85,14 @@ fun dateStrToDigit(str: String): String {
             "января" to "01", "марта" to "03", "мая" to "05", "июля" to "07",
             "августа" to "08", "октября" to "10", "ноября" to "11"
         )
-        val month28 = mapOf<String, String>("февраля" to "02")
+        val month29 = mapOf<String, String>("февраля" to "02")
         val parts = str.split(" ")
         return if (parts[1] in month30 && parts[0].toInt() in 1..30)
             twoDigitStr(parts[0].toInt()) + "." + month30[parts[1]] + "." + parts[2]
         else if (parts[1] in month31 && parts[0].toInt() in 1..31)
             twoDigitStr(parts[0].toInt()) + "." + month31[parts[1]] + "." + parts[2]
-        else if (parts[1] in month28 && parts[0].toInt() in 1..28)
-            twoDigitStr(parts[0].toInt()) + "." + month28[parts[1]] + "." + parts[2]
+        else if (parts[1] in month29 && parts[0].toInt() in 1..29)
+            twoDigitStr(parts[0].toInt()) + "." + month29[parts[1]] + "." + parts[2]
         else ""
     }
     catch (e: Exception) {
