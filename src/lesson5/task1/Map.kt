@@ -2,6 +2,10 @@
 
 package lesson5.task1
 
+import lesson4.task1.mean
+import ru.spbstu.wheels.NullableMonad.map
+import javax.swing.RowFilter.Entry
+
 // Урок 5: ассоциативные массивы и множества
 // Максимальное количество баллов = 14
 // Рекомендуемое количество баллов = 9
@@ -121,13 +125,7 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
  *   containsIn(mapOf("a" to "z"), mapOf("a" to "z", "b" to "sweet")) -> true
  *   containsIn(mapOf("a" to "z"), mapOf("a" to "zee", "b" to "sweet")) -> false
  */
-fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
-    val c = mutableListOf<String>()
-    for ((key, value) in a) {
-        if (value == b[key]) c.add(value)
-    }
-    return a.values.toList() == c
-}
+fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean = a.all { it.key in b && it.value == b[it.key] }
 
 /**
  * Простая (2 балла)
@@ -154,13 +152,7 @@ fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>) {
  * В выходном списке не должно быть повторяющихся элементов,
  * т. е. whoAreInBoth(listOf("Марат", "Семён, "Марат"), listOf("Марат", "Марат")) == listOf("Марат")
  */
-fun whoAreInBoth(a: List<String>, b: List<String>): List<String> {
-    val c = mutableListOf<String>()
-    for (value in a) {
-        if (value in b && value !in c) c.add(value)
-    }
-    return c
-}
+fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = a.toSet().intersect(b.toSet()).toList()
 
 /**
  * Средняя (3 балла)
@@ -180,15 +172,10 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> {
  *   ) -> mapOf("Emergency" to "112, 911", "Police" to "02")
  */
 fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> {
-    val res = mutableMapOf<String, String>()
-    for ((key, value) in mapA) {
-        if (key in mapB) {
-            if (value != mapB[key]) res[key] = value + ", " + mapB[key]
-            else res[key] = value
-        } else res[key] = value
-    }
+    val res = mapA.toMutableMap()
     for ((key, value) in mapB) {
-        if (key !in res) res[key] = value
+        if (key in res.keys && res[key] != value) res[key] += ", $value"
+        else res[key] = value
     }
     return res
 }
@@ -203,7 +190,9 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
  *   averageStockPrice(listOf("MSFT" to 100.0, "MSFT" to 200.0, "NFLX" to 40.0))
  *     -> mapOf("MSFT" to 150.0, "NFLX" to 40.0)
  */
-fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> = TODO()
+fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> = stockPrices.groupBy(
+    keySelector = { it.first },
+    valueTransform = { it.second }).mapValues { mean(it.value) }
 
 /**
  * Средняя (4 балла)
@@ -245,17 +234,8 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean = TODO()
  * Например:
  *   extractRepeats(listOf("a", "b", "a")) -> mapOf("a" to 2)
  */
-fun extractRepeats(list: List<String>): Map<String, Int> {
-    val res = mutableMapOf<String, Int>()
-    for (i in list.indices) {
-        var c = 1
-        for (k in i + 1 until list.size) {
-            if (list[i] == list[k]) c++
-        }
-        if (c != 1) res[list[i]] = c
-    }
-    return res.toMap()
-}
+fun extractRepeats(list: List<String>): Map<String, Int> =
+    list.groupingBy { it }.eachCount().filter { (key, value) -> value > 1 }
 
 /**
  * Средняя (3 балла)
@@ -308,14 +288,21 @@ fun hasAnagrams(words: List<String>): Boolean = TODO()
 fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> {
     val res = friends.toMutableMap()
     for ((key, value) in friends) {
-        for (i in value) {
-            if (i !in friends.keys) res[i] = setOf()
-            else {
-                val b = friends[i]?.toMutableSet() ?: mutableSetOf()
-                if (key in b) b.remove(key)
-                res[key] = value.union(b)
+        fun kent(value: Set<String>) {
+            for (i in value) {
+                var n:Set<String> = if (key in friends[i]!!) friends[i]!! - key
+                else friends[i]!!
+                if (i in friends.keys && !friends[i].isNullOrEmpty()) {
+                    res[key] = res[key]!!.union( n )
+                    kent(
+                        value = n
+                    )
+                } else if (i !in res.keys) {
+                    res[i] = setOf()
+                }
             }
         }
+        kent(value = value)
     }
     return res.toMap()
 }
