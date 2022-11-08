@@ -2,6 +2,7 @@
 
 package lesson6.task1
 
+import lesson2.task2.daysInMonth
 import java.lang.IllegalArgumentException
 
 // Урок 6: разбор строк, исключения
@@ -78,24 +79,46 @@ fun main() {
  */
 fun dateStrToDigit(str: String): String {
     try {
-        val month30 = mapOf<String, String>(
-            "апреля" to "04", "июня" to "06", "сентября" to "09", "декабря" to "12"
-        )
-        val month31 = mapOf<String, String>(
-            "января" to "01", "марта" to "03", "мая" to "05", "июля" to "07",
-            "августа" to "08", "октября" to "10", "ноября" to "11"
-        )
-        val month29 = mapOf<String, String>("февраля" to "02")
         val parts = str.split(" ")
-        return if (parts[1] in month30 && parts[0].toInt() in 1..30)
-            twoDigitStr(parts[0].toInt()) + "." + month30[parts[1]] + "." + parts[2]
-        else if (parts[1] in month31 && parts[0].toInt() in 1..31)
-            twoDigitStr(parts[0].toInt()) + "." + month31[parts[1]] + "." + parts[2]
-        else if (parts[1] in month29 && parts[0].toInt() in 1..29)
-            twoDigitStr(parts[0].toInt()) + "." + month29[parts[1]] + "." + parts[2]
-        else ""
-    }
-    catch (e: Exception) {
+        when {
+            parts[1] == "января" -> if (parts[0].toInt() <= daysInMonth(1, parts[2].toInt()))
+                return String.format("%02d", parts[0]) + ".01" + "." + parts[2]
+
+            parts[1] == "февраля" -> if (parts[0].toInt() <= daysInMonth(1, parts[2].toInt()))
+                return String.format("%02d", parts[0]) + ".02" + "." + parts[2]
+
+            parts[1] == "марта" -> if (parts[0].toInt() <= daysInMonth(1, parts[2].toInt()))
+                return String.format("%02d", parts[0]) + ".03" + "." + parts[2]
+
+            parts[1] == "апреля" -> if (parts[0].toInt() <= daysInMonth(1, parts[2].toInt()))
+                return String.format("%02d", parts[0].toInt()) + ".04" + "." + parts[2]
+
+            parts[1] == "мая" -> if (parts[0].toInt() <= daysInMonth(1, parts[2].toInt()))
+                return String.format("%02d", parts[0].toInt()) + ".05" + "." + parts[2]
+
+            parts[1] == "июня" -> if (parts[0].toInt() <= daysInMonth(1, parts[2].toInt()))
+                return String.format("%02d", parts[0].toInt()) + ".06" + "." + parts[2]
+
+            parts[1] == "июля" -> if (parts[0].toInt() <= daysInMonth(1, parts[2].toInt()))
+                return String.format("%02d", parts[0].toInt()) + ".07" + "." + parts[2]
+
+            parts[1] == "августа" -> if (parts[0].toInt() <= daysInMonth(1, parts[2].toInt()))
+                return String.format("%02d", parts[0].toInt()) + ".08" + "." + parts[2]
+
+            parts[1] == "сентября" -> if (parts[0].toInt() <= daysInMonth(1, parts[2].toInt()))
+                return String.format("%02d", parts[0].toInt()) + ".09" + "." + parts[2]
+
+            parts[1] == "октября" -> if (parts[0].toInt() <= daysInMonth(1, parts[2].toInt()))
+                return String.format("%02d", parts[0].toInt()) + ".10" + "." + parts[2]
+
+            parts[1] == "ноября" -> if (parts[0].toInt() <= daysInMonth(1, parts[2].toInt()))
+                return String.format("%02d", parts[0].toInt()) + ".11" + "." + parts[2]
+
+            parts[1] == "декабря" -> if (parts[0].toInt() <= daysInMonth(1, parts[2].toInt()))
+                return String.format("%02d", parts[0].toInt()) + ".12" + "." + parts[2]
+        }
+        return ""
+    } catch (e: Exception) {
         return ""
     }
 }
@@ -128,8 +151,8 @@ fun dateDigitToStr(digital: String): String = TODO()
  */
 fun flattenPhoneNumber(phone: String): String {
     val n = Regex("""[\-| ]""").replace(phone, "")
-    val a = Regex("""^\+?\d+\(?\d+\)?\d+""").matches(n)
-    return if (a) Regex("""[( | )]""").replace(n, "")
+    return if (Regex("""^(\+\d+)?(\(\d+\))?\d+""").matches(n))
+        Regex("""[( | )]""").replace(n, "")
     else ""
 }
 
@@ -148,11 +171,10 @@ fun bestLongJump(jumps: String): Int {
         val n = Regex("""[-|%]""").replace(jumps, "")
         if (n.contains(Regex("""[^\d| ]"""))) -1
         else {
-            val m = n.split(" ")
-            return m.max().toInt()
+            return n.split(" ").max().toInt()
         }
 
-    } catch (e: java.lang.Exception) {
+    } catch (e: java.lang.NumberFormatException) {
         -1
     }
 }
@@ -184,8 +206,7 @@ fun plusMinus(expression: String): Int {
     var n = Regex(""" \+ """).replace(expression, " ")
     n = Regex("""- """).replace(n, "-")
     if (n.contains(Regex("""\+|- """))) throw IllegalArgumentException()
-    val res = n.split(" ")
-    return res.sumOf { it.toInt() }
+    return n.split(" ").sumOf { it.toInt() }
 }
 
 /**

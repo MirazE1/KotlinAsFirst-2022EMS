@@ -39,7 +39,7 @@ class Tests {
         assertEquals("18.11.2018", dateStrToDigit("18 ноября 2018"))
         assertEquals("", dateStrToDigit("23"))
         assertEquals("03.04.2011", dateStrToDigit("3 апреля 2011"))
-        assertEquals("", dateStrToDigit("32 сентября 2011"))
+        assertEquals("31.12.1", dateStrToDigit("31 декабря 1"))
         assertEquals("", dateStrToDigit("29 февраля 1993"))
     }
 
@@ -65,7 +65,7 @@ class Tests {
         assertEquals("+425667", flattenPhoneNumber("+42 56 -- 67"))
         assertEquals("+42566789", flattenPhoneNumber("+42(56 -- 67)89"))
         assertEquals("", flattenPhoneNumber("ab-123"))
-        assertEquals("", flattenPhoneNumber("134_+874"))
+        assertEquals("7", flattenPhoneNumber("7"))
     }
 
     @Test
