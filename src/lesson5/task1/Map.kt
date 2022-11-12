@@ -3,9 +3,7 @@
 package lesson5.task1
 
 import lesson4.task1.mean
-import ru.spbstu.wheels.NullableMonad.map
-import javax.swing.RowFilter.Entry
-
+import kotlin.math.abs
 // Урок 5: ассоциативные массивы и множества
 // Максимальное количество баллов = 14
 // Рекомендуемое количество баллов = 9
@@ -285,28 +283,7 @@ fun hasAnagrams(words: List<String>): Boolean = TODO()
  *          "GoodGnome" to setOf()
  *        )
  */
-fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> {
-    val res = friends.toMutableMap()
-    for ((key, value) in friends) {
-        fun kent(value: Set<String>) {
-            for (i in value) {
-                var n:Set<String> = if (key in friends[i]!!) friends[i]!! - key
-                else friends[i]!!
-                if (i in friends.keys && !friends[i].isNullOrEmpty()) {
-                    res[key] = res[key]!!.union( n )
-                    kent(
-                        value = n
-                    )
-                } else if (i !in res.keys) {
-                    res[i] = setOf()
-                }
-            }
-        }
-        kent(value = value)
-    }
-    return res.toMap()
-}
-
+fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> = TODO()
 /**
  * Сложная (6 баллов)
  *
@@ -324,7 +301,12 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
  *   findSumOfTwo(listOf(1, 2, 3), 4) -> Pair(0, 2)
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
-fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> = TODO()
+fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
+    for (i in list)
+        if (abs(number - i) in list.filter { it != i })
+            return Pair(list.indexOf(minOf(i, abs(number - i))), list.indexOf(maxOf(i, abs(number - i))))
+    return Pair(-1, -1)
+}
 
 /**
  * Очень сложная (8 баллов)
