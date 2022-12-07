@@ -311,16 +311,25 @@ Suspendisse ~~et elit in enim tempus iaculis~~.
  */
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
     val writer = File(outputName).bufferedWriter()
-    val text = File(inputName).readLines().toMutableList()
-    if (text[text.size - 1].matches(Regex("""\s*"""))) text[text.size - 1] = ""
-    if (text[0].matches(Regex("""\s*"""))) text[0] = ""
+    val text = File(inputName).readLines()
+    val emptyList = mutableListOf<Boolean>()
     var i = 1
     var b = 1
     var s = 1
     writer.write("<html><body><p>")
-    var pline = ""
-    for (line in text) {
-        if (line.matches(Regex("""\s*""")) && !pline.matches(Regex("""\s*"""))) writer.write("</p><p>")
+    for (line in text)
+        if (line.isNotEmpty())
+            emptyList.add(false)
+        else
+            emptyList.add(true)
+    emptyList.add(true)
+    for ((counter, line) in text.withIndex()) {
+        if (counter < emptyList.indexOf(false))
+            writer.write("")
+        else if (emptyList[counter] && !emptyList[counter + 1])
+            writer.write("</p><p>")
+        else if (emptyList[counter] && emptyList[counter + 1])
+            writer.write("")
         else {
             var line = Regex("""~~""").replace(line, " ~~ ")
             line = Regex("""\*""").replace(line, " * ")
@@ -350,7 +359,6 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
             }
 
         }
-        pline = line
     }
     writer.write("</p></body></html>")
     writer.close()
