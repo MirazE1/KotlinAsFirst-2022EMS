@@ -316,8 +316,9 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     var b = 1
     var s = 1
     writer.write("<html><body><p>")
+    var pline = ""
     for (line in text) {
-        if (line.isEmpty()) writer.write("</p><p>")
+        if (line.isEmpty() && pline.isNotEmpty()) writer.write("</p><p>")
         else {
             var line = Regex("""~~""").replace(line, " ~~ ")
             line = Regex("""\*""").replace(line, " * ")
@@ -347,6 +348,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
             }
 
         }
+        pline = "line"
     }
     writer.write("</p></body></html>")
     writer.close()
