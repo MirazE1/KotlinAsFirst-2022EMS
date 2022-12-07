@@ -311,7 +311,9 @@ Suspendisse ~~et elit in enim tempus iaculis~~.
  */
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
     val writer = File(outputName).bufferedWriter()
-    val text = File(inputName).readLines()
+    val text = File(inputName).readLines().toMutableList()
+    if (text[text.size - 1].matches(Regex("""\s*"""))) text[text.size - 1] = ""
+    if (text[0].matches(Regex("""\s*"""))) text[0] = ""
     var i = 1
     var b = 1
     var s = 1
