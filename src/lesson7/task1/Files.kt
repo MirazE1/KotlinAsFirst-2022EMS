@@ -181,8 +181,10 @@ fun top20Words(inputName: String): Map<String, Int> {
     val con = mutableMapOf<String, Int>()
     if (text.matches(Regex(""))) return con
     for (word in text.split(Regex("\\s+"))) {
-        if (word in con.keys) con[word] = con[word]!! + 1
-        else con[word] = 1
+        if (word.isNotEmpty()) {
+            if (word in con.keys) con[word] = con[word]!! + 1
+            else con[word] = 1
+        }
     }
     val values = con.values.toList().sorted().reversed()
     return if (con.keys.count() <= 20) con
