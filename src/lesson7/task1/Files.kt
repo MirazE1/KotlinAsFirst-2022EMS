@@ -3,6 +3,7 @@
 package lesson7.task1
 
 import java.io.File
+import java.util.*
 
 // Урок 7: работа с файлами
 // Урок интегральный, поэтому его задачи имеют сильно увеличенную стоимость
@@ -63,7 +64,14 @@ fun alignFile(inputName: String, lineLength: Int, outputName: String) {
  * Подчёркивание в середине и/или в конце строк значения не имеет.
  */
 fun deleteMarked(inputName: String, outputName: String) {
-    TODO()
+    val writer = File(outputName).bufferedWriter()
+    for (line in File(inputName).readLines()){
+        if (!line.startsWith("_")) {
+            writer.write(line)
+            writer.newLine()
+        }
+    }
+    writer.close()
 }
 
 /**
@@ -167,7 +175,25 @@ fun alignFileByWidth(inputName: String, outputName: String) {
  * Ключи в ассоциативном массиве должны быть в нижнем регистре.
  *
  */
-fun top20Words(inputName: String): Map<String, Int> = TODO()
+fun top20Words(inputName: String): Map<String, Int> {
+    var text = File(inputName).readText().lowercase()
+    text = Regex("[^a-zа-я\\sё]").replace(text, " ")
+    val con = mutableMapOf<String, Int>()
+    if (text.matches(Regex(""))) return con
+    for (word in text.split(Regex("\\s+"))) {
+        if (word in con.keys) con[word] = con[word]!! + 1
+        else con[word] = 1
+    }
+    val values = con.values.toList().sorted().reversed()
+    return if (con.keys.count() <= 20) con
+    else {
+        val res = mutableMapOf<String, Int>()
+        for ((key, value) in con) {
+            if (value >= values[19]) res[key] = value
+        }
+        res
+    }
+}
 
 /**
  * Средняя (14 баллов)
@@ -282,7 +308,46 @@ Suspendisse ~~et elit in enim tempus iaculis~~.
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
  */
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
-    TODO()
+    val writer = File(outputName).bufferedWriter()
+    val text = File(inputName).readLines()
+    var i = 1
+    var b = 1
+    var s = 1
+    writer.write("<html><body><p>")
+    for (line in text) {
+        if (line.isEmpty()) writer.write("</p><p>")
+        else {
+            var line = Regex("""~~""").replace(line, " ~~ ")
+            line = Regex("""\*""").replace(line, " * ")
+            line = Regex(""" \*  \* """).replace(line, " ** ")
+            for (word in line.split(Regex("\\s+"))) {
+                when (word) {
+                    "*" -> {
+                        if (i % 2 != 0) writer.write("<i>")
+                        else writer.write("</i>")
+                        i += 1
+                    }
+
+                    "**" -> {
+                        if (b % 2 != 0) writer.write("<b>")
+                        else writer.write("</b>")
+                        b += 1
+                    }
+
+                    "~~" -> {
+                        if (s % 2 != 0) writer.write("<s>")
+                        else writer.write("</s>")
+                        s += 1
+                    }
+
+                    else -> writer.write(word)
+                }
+            }
+
+        }
+    }
+    writer.write("</p></body></html>")
+    writer.close()
 }
 
 /**
