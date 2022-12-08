@@ -316,41 +316,43 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     var b = 1
     var s = 1
     writer.write("<html><body><p>")
-    var pline = ""
+    var a = text.size
     for ((index, line) in text.withIndex()) {
-        var line = Regex("""^\s*|\s*$|^\s*(\*\*\s+\*\*)+\s*$|^\s*(~~\s+~~)+\s*$|^\s*(\*\s+\*)+\s*$""").replace(line, "")
-        if (line.matches(Regex("""\s*""")) && !pline.matches(Regex("""\s*""")))
-            writer.write("</p><p>")
-        else {
-            line = Regex("""~~""").replace(line, " ~~ ")
-            line = Regex("""\*""").replace(line, " * ")
-            line = Regex(""" \*  \* """).replace(line, " ** ")
-            for (word in line.split(Regex("\\s+"))) {
-                when (word) {
-                    "*" -> {
-                        if (i % 2 != 0) writer.write("<i>")
-                        else writer.write("</i>")
-                        i += 1
-                    }
+        var line = Regex("""^\s*(\*\*\s+\*\*)+\s*$|^\s*(~~\s+~~)+\s*$|^\s*(\*\s+\*)+\s*$""").replace(line, "")
+        if (!line.matches(Regex("""\s*""")) || index > a) {
+            a = index
+            if (line.matches(Regex("""\s*""")) && !text[index + 1].matches(Regex("""\s*""")) ?: false)
+                writer.write("</p><p>")
+            else {
+                line = Regex("""~~""").replace(line, " ~~ ")
+                line = Regex("""\*""").replace(line, " * ")
+                line = Regex(""" \*  \* """).replace(line, " ** ")
+                for (word in line.split(Regex("\\s+"))) {
+                    when (word) {
+                        "*" -> {
+                            if (i % 2 != 0) writer.write("<i>")
+                            else writer.write("</i>")
+                            i += 1
+                        }
 
-                    "**" -> {
-                        if (b % 2 != 0) writer.write("<b>")
-                        else writer.write("</b>")
-                        b += 1
-                    }
+                        "**" -> {
+                            if (b % 2 != 0) writer.write("<b>")
+                            else writer.write("</b>")
+                            b += 1
+                        }
 
-                    "~~" -> {
-                        if (s % 2 != 0) writer.write("<s>")
-                        else writer.write("</s>")
-                        s += 1
-                    }
+                        "~~" -> {
+                            if (s % 2 != 0) writer.write("<s>")
+                            else writer.write("</s>")
+                            s += 1
+                        }
 
-                    else -> writer.write(word)
+                        else -> writer.write(word)
+                    }
                 }
-            }
 
+            }
         }
-        pline = line
     }
     writer.write("</p></body></html>")
     writer.close()
