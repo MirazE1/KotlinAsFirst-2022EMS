@@ -312,26 +312,16 @@ Suspendisse ~~et elit in enim tempus iaculis~~.
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
     val writer = File(outputName).bufferedWriter()
     val text = File(inputName).readLines()
-    val emptyList = mutableListOf<Boolean>()
     var i = 1
     var b = 1
     var s = 1
     writer.write("<html><body><p>")
-    for (line in text)
-        if (line.matches(Regex("""\s*""")))
-            emptyList.add(false)
-        else
-            emptyList.add(true)
-    emptyList.add(true)
-    for ((counter, line) in text.withIndex()) {
-        if (counter < emptyList.indexOf(false))
-            writer.write("")
-        else if (emptyList[counter] && !emptyList[counter + 1])
+    for ((index, line) in text.withIndex()) {
+        var line = Regex("""^\s*|\s*$|(\*\*\s+\*\*)|(~~\s+~~)|(\*\s+\*)""").replace(line, "")
+        if (line.matches(Regex("""\s*""")) && !text[index - 1].matches(Regex("""\s*""")))
             writer.write("</p><p>")
-        else if (emptyList[counter] && emptyList[counter + 1])
-            writer.write("")
         else {
-            var line = Regex("""~~""").replace(line, " ~~ ")
+            line = Regex("""~~""").replace(line, " ~~ ")
             line = Regex("""\*""").replace(line, " * ")
             line = Regex(""" \*  \* """).replace(line, " ** ")
             for (word in line.split(Regex("\\s+"))) {
