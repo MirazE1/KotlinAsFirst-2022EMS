@@ -318,7 +318,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     var s = 1
     writer.write("<html><body><p>")
     for (line in text)
-        if (line.isNotEmpty())
+        if (line.matches(Regex("""\s*""")))
             emptyList.add(false)
         else
             emptyList.add(true)
