@@ -319,7 +319,6 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     var a = text.size
     var next = ""
     for ((index, line) in text.withIndex()) {
-        var line = Regex("""^\s*(\*\*\s+\*\*)+\s*$|^\s*(~~\s+~~)+\s*$|^\s*(\*\s+\*)+\s*$""").replace(line, "")
         if (!line.matches(Regex("""\s*""")) || index > a) {
             a = index
             next = if (index == text.lastIndex) ""
@@ -327,7 +326,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
             if (line.matches(Regex("""\s*""")) && !next.matches(Regex("""\s*""")))
                 writer.write("</p><p>")
             else {
-                line = Regex("""~~""").replace(line, " ~~ ")
+                var line = Regex("""~~""").replace(line, " ~~ ")
                 line = Regex("""\*""").replace(line, " * ")
                 line = Regex(""" \*  \* """).replace(line, " ** ")
                 for (word in line.split(Regex("\\s+"))) {
