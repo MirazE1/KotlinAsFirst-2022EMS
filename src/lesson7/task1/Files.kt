@@ -317,7 +317,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     var s = 1
     writer.write("<html><body><p>")
     for ((index, line) in text.withIndex()) {
-        var line = Regex("""^\s*|\s*$|(\*\*\s+\*\*)|(~~\s+~~)|(\*\s+\*)""").replace(line, "")
+        var line = Regex("""^\s*|\s*$|^\s*(\*\*\s+\*\*)+\s*$|^\s*(~~\s+~~)+\s*$|^\s*(\*\s+\*)+\s*$""").replace(line, "")
         if (line.matches(Regex("""\s*""")) && !text[index - 1].matches(Regex("""\s*""")))
             writer.write("</p><p>")
         else {
