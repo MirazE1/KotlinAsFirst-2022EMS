@@ -80,44 +80,47 @@ fun main() {
 fun dateStrToDigit(str: String): String {
     try {
         val parts = str.split(" ")
+        var n = ""
         when {
             parts[1] == "января" -> if (parts[0].toInt() <= daysInMonth(1, parts[2].toInt()))
-                return String.format("%02d", parts[0].toInt()) + ".01" + "." + parts[2]
+                n = ".01"
 
             parts[1] == "февраля" -> if (parts[0].toInt() <= daysInMonth(2, parts[2].toInt()))
-                return String.format("%02d", parts[0].toInt()) + ".02" + "." + parts[2]
+                n = ".02"
 
             parts[1] == "марта" -> if (parts[0].toInt() <= daysInMonth(3, parts[2].toInt()))
-                return String.format("%02d", parts[0].toInt()) + ".03" + "." + parts[2]
+                n = ".03"
 
             parts[1] == "апреля" -> if (parts[0].toInt() <= daysInMonth(4, parts[2].toInt()))
-                return String.format("%02d", parts[0].toInt()) + ".04" + "." + parts[2]
+                n = ".04"
 
             parts[1] == "мая" -> if (parts[0].toInt() <= daysInMonth(5, parts[2].toInt()))
-                return String.format("%02d", parts[0].toInt()) + ".05" + "." + parts[2]
+                n = ".05"
 
             parts[1] == "июня" -> if (parts[0].toInt() <= daysInMonth(6, parts[2].toInt()))
-                return String.format("%02d", parts[0].toInt()) + ".06" + "." + parts[2]
+                n = ".06"
 
             parts[1] == "июля" -> if (parts[0].toInt() <= daysInMonth(7, parts[2].toInt()))
-                return String.format("%02d", parts[0].toInt()) + ".07" + "." + parts[2]
+                n = ".07"
 
             parts[1] == "августа" -> if (parts[0].toInt() <= daysInMonth(8, parts[2].toInt()))
-                return String.format("%02d", parts[0].toInt()) + ".08" + "." + parts[2]
+                n = ".08"
 
             parts[1] == "сентября" -> if (parts[0].toInt() <= daysInMonth(9, parts[2].toInt()))
-                return String.format("%02d", parts[0].toInt()) + ".09" + "." + parts[2]
+                n = ".09"
 
             parts[1] == "октября" -> if (parts[0].toInt() <= daysInMonth(10, parts[2].toInt()))
-                return String.format("%02d", parts[0].toInt()) + ".10" + "." + parts[2]
+                n = ".10"
 
             parts[1] == "ноября" -> if (parts[0].toInt() <= daysInMonth(11, parts[2].toInt()))
-                return String.format("%02d", parts[0].toInt()) + ".11" + "." + parts[2]
+                n = ".11"
 
             parts[1] == "декабря" -> if (parts[0].toInt() <= daysInMonth(12, parts[2].toInt()))
-                return String.format("%02d", parts[0].toInt()) + ".12" + "." + parts[2]
+                n = ".12"
         }
-        return ""
+        return if (n.isNotEmpty()) String.format("%02d", parts[0].toInt()) + n + "." + parts[2]
+        else ""
+
     } catch (e: Exception) {
         return ""
     }
