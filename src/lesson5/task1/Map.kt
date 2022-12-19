@@ -3,6 +3,7 @@
 package lesson5.task1
 
 import lesson4.task1.mean
+import java.lang.IllegalStateException
 import kotlin.math.abs
 // Урок 5: ассоциативные массивы и множества
 // Максимальное количество баллов = 14
@@ -302,12 +303,11 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
 fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
-    for (i in list)
-        if (i <= number && number - i in list)
-            if (i == number - i && list.indexOf(i) != list.lastIndexOf(i))
-                return Pair(list.indexOf(i), list.lastIndexOf(i))
-            else if (list.indexOf(i) != list.indexOf(number - i))
-                return Pair(list.indexOf(minOf(i, number - i)), list.indexOf(maxOf(i, number - i)))
+    val map = mutableMapOf<Int, Int>()
+    for (i in list.indices)
+        if (list[i] <= number && number - list[i] in list)
+            if (map.containsKey(number - list[i])) return Pair(map[number - list[i]]!!, i)
+            else map[list[i]] = i
     return Pair(-1, -1)
 }
 
@@ -333,3 +333,31 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
  *   ) -> emptySet()
  */
 fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> = TODO()
+
+
+
+
+
+fun cinema(
+    places: MutableList<MutableList<Boolean>>,
+    requests: Map<String, Pair<Int, Int>>
+): Map<String, List<Int>> {
+    val res = mutableMapOf<String, List<Int>>()
+    for ((name, book) in requests) {
+        val t = mutableListOf<Int>()
+        var n = book.second
+        if (book.first in 0..places.count() && book.second >= 0) {
+            for ((index, i) in places[book.first].withIndex()) {
+                if (n == 0) break
+                if (!i) {
+                    n -= 1
+                    t.add(index + 1)
+                    places[book.first][index] = !i
+                }
+            }
+            if (n != 0) throw IllegalStateException()
+            res[name] = t
+        } else throw IllegalArgumentException()
+    }
+    return res
+}
