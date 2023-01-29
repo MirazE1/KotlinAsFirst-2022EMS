@@ -4,6 +4,7 @@ package lesson6.task1
 
 import lesson2.task2.daysInMonth
 import java.lang.IllegalArgumentException
+import java.lang.IndexOutOfBoundsException
 
 // Урок 6: разбор строк, исключения
 // Максимальное количество баллов = 13
@@ -121,7 +122,7 @@ fun dateStrToDigit(str: String): String {
         return if (n.isNotEmpty()) String.format("%02d", parts[0].toInt()) + n + "." + parts[2]
         else ""
 
-    } catch (e: Exception) {
+    } catch (e: IndexOutOfBoundsException) {
         return ""
     }
 }
